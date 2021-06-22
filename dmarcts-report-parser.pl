@@ -76,8 +76,6 @@ use File::MimeInfo;
 use IO::Socket::SSL;
 #use IO::Socket::SSL 'debug3';
 
-
-
 ################################################################################
 ### usage ######################################################################
 ################################################################################
@@ -175,7 +173,7 @@ my $conf_file = 'dmarcts-report-parser.conf';
 # Get command line options.
 my %options = ();
 use constant { TS_IMAP => 0, TS_MESSAGE_FILE => 1, TS_XML_FILE => 2, TS_MBOX_FILE => 3, TS_ZIP_FILE => 4 };
-GetOptions( \%options, 'd', 'r', 'x', 'm', 'e', 'i', 'z', 'delete', 'info', 'c' => \$conf_file );
+GetOptions( \%options, 'd', 'r', 'x', 'm', 'e', 'i', 'z', 'delete', 'info', 'c=s' => \$conf_file );
 
 # locate conf file or die
 if ( -e $conf_file ) {
