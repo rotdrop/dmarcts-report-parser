@@ -74,6 +74,7 @@ use PerlIO::gzip;
 use File::Basename ();
 use File::MimeInfo;
 use IO::Socket::SSL;
+use Cwd;
 #use IO::Socket::SSL 'debug3';
 
 ################################################################################
@@ -263,7 +264,7 @@ if (exists $options{info}) {$processInfo = 1;}
 
 # Setup connection to database server.
 our %dbx;
-my $dbx_file = File::Basename::dirname($0) . "/dbx_$dbtype.pl";
+my $dbx_file = File::Basename::dirname(Cwd::abs_path($0)) . "/dbx_$dbtype.pl";
 my $dbx_return = do $dbx_file;
 die "$scriptname: couldn't load DB definition for type $dbtype: $@" if $@;
 die "$scriptname: couldn't load DB definition for type $dbtype: $!" unless defined $dbx_return;
@@ -299,7 +300,7 @@ if ($reports_source == TS_IMAP) {
 		print "using ssl without verify servercert.\n" if $debug;
 		$socketargs = [ SSL_verify_mode => SSL_VERIFY_NONE ];
 	}
-  
+
 	print "connection to $imapserver with Ssl => $imapssl, User => $imapuser, Ignoresizeerrors => $imapignoreerror\n" if $debug;
 
 	# Setup connection to IMAP server.
@@ -552,7 +553,7 @@ sub processXML {
 # itself is not checked to be a valid DMARC report.
 sub getXMLFromMessage {
 	my ($message) = (@_);
-	
+
 	# fixup type in trustwave SEG mails
         $message =~ s/ContentType:/Content-Type:/;
 
@@ -790,7 +791,7 @@ sub storeXMLInDatabase {
         my $policy_p = undef;
         my $policy_sp = undef;
         my $policy_pct = undef;
- 
+
         if (ref $xml->{'policy_published'} eq "HASH") {
                 $domain =  $xml->{'policy_published'}->{'domain'};
                 $policy_adkim = $xml->{'policy_published'}->{'adkim'};
